@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Cart with Side Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(to right, #ff7e5f, #feb47b); /* Random Gradient */
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .product-card {
+      background: #fff;
+      padding: 20px;
+      border: 2px solid black; /* Black border */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 180px;
+      text-align: center;
+      margin: 10px;
+      border-radius: 0; /* Sharp edges */
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .product-card:hover {
+      transform: scale(1.05); /* Slight scale-up effect on hover */
+    }
+
+    .product-card img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .product-card h3 {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .product-card p {
+      font-size: 16px;
+      color: #555;
+    }
+
+    .add-to-cart {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-to-cart:hover {
+      background-color: #45a049;
+    }
+
+    /* Cart icon styling */
+    .cart-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 24px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    /* Cart Side Panel Styling */
+    .cart-side-panel {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100%;
+      background: linear-gradient(to bottom, #ff7e5f, #feb47b); /* New gradient for the cart */
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+      color: white;
+    }
+
+    .cart-side-panel.open {
+      right: 0;
+    }
+
+    .cart-items {
+      max-height: 70%;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .cart-item button:hover {
+      background-color: darkred;
+    }
+
+    .cart-footer {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .cart-footer button {
+      background-color: #FF6347;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .cart-footer button:hover {
+      background-color: #E5534E;
+    }
+
+    .close-cart {
+      background-color: #FF6347;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .close-cart:hover {
+      background-color: #E5534E;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Our Products</h1>
+
+  <!-- Product Rows -->
+  <div class="product-container">
+    <!-- Product Row 1 -->
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+      <h3>Nokia 1</h3>
+      <p>$25.00</p>
+      <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif" alt="Nokia 2">
+      <h3>Nokia 2</h3>
+      <p>$15.00</p>
+      <button class="add-to-cart" data-product="Nokia 2" data-price="15.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif" alt="Nokia 3">
+      <h3>Nokia 3</h3>
+      <p>$30.00</p>
+      <button class="add-to-cart" data-product="Nokia 3" data-price="30.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+      <h3>Nokia 1</h3>
+      <p>$25.00</p>
+      <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+    </div>
+  </div>
+
+    <!-- Product Rows -->
+    <div class="product-container">
+      <!-- Product Row 1 -->
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+        <h3>Nokia 1</h3>
+        <p>$25.00</p>
+        <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif" alt="Nokia 2">
+        <h3>Nokia 2</h3>
+        <p>$15.00</p>
+        <button class="add-to-cart" data-product="Nokia 2" data-price="15.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif" alt="Nokia 3">
+        <h3>Nokia 3</h3>
+        <p>$30.00</p>
+        <button class="add-to-cart" data-product="Nokia 3" data-price="30.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+        <h3>Nokia 1</h3>
+        <p>$25.00</p>
+        <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+      </div>
+    </div>
+
+      <!-- Product Rows -->
+  <div class="product-container">
+    <!-- Product Row 1 -->
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+      <h3>Nokia 1</h3>
+      <p>$25.00</p>
+      <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif" alt="Nokia 2">
+      <h3>Nokia 2</h3>
+      <p>$15.00</p>
+      <button class="add-to-cart" data-product="Nokia 2" data-price="15.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif" alt="Nokia 3">
+      <h3>Nokia 3</h3>
+      <p>$30.00</p>
+      <button class="add-to-cart" data-product="Nokia 3" data-price="30.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+      <h3>Nokia 1</h3>
+      <p>$25.00</p>
+      <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+    </div>
+  </div>
+
+    <!-- Product Rows -->
+    <div class="product-container">
+      <!-- Product Row 1 -->
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+        <h3>Nokia 1</h3>
+        <p>$25.00</p>
+        <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif" alt="Nokia 2">
+        <h3>Nokia 2</h3>
+        <p>$15.00</p>
+        <button class="add-to-cart" data-product="Nokia 2" data-price="15.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif" alt="Nokia 3">
+        <h3>Nokia 3</h3>
+        <p>$30.00</p>
+        <button class="add-to-cart" data-product="Nokia 3" data-price="30.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+        <h3>Nokia 1</h3>
+        <p>$25.00</p>
+        <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+      </div>
+    </div>
+
+      <!-- Product Rows -->
+  <div class="product-container">
+    <!-- Product Row 1 -->
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+      <h3>Nokia 1</h3>
+      <p>$25.00</p>
+      <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif" alt="Nokia 2">
+      <h3>Nokia 2</h3>
+      <p>$15.00</p>
+      <button class="add-to-cart" data-product="Nokia 2" data-price="15.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif" alt="Nokia 3">
+      <h3>Nokia 3</h3>
+      <p>$30.00</p>
+      <button class="add-to-cart" data-product="Nokia 3" data-price="30.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+      <h3>Nokia 1</h3>
+      <p>$25.00</p>
+      <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+    </div>
+  </div>
+
+    <!-- Product Rows -->
+    <div class="product-container">
+      <!-- Product Row 1 -->
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+        <h3>Nokia 1</h3>
+        <p>$25.00</p>
+        <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif" alt="Nokia 2">
+        <h3>Nokia 2</h3>
+        <p>$15.00</p>
+        <button class="add-to-cart" data-product="Nokia 2" data-price="15.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif" alt="Nokia 3">
+        <h3>Nokia 3</h3>
+        <p>$30.00</p>
+        <button class="add-to-cart" data-product="Nokia 3" data-price="30.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+        <h3>Nokia 1</h3>
+        <p>$25.00</p>
+        <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+      </div>
+    </div>
+
+      <!-- Product Rows -->
+  <div class="product-container">
+    <!-- Product Row 1 -->
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+      <h3>Nokia 1</h3>
+      <p>$25.00</p>
+      <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif" alt="Nokia 2">
+      <h3>Nokia 2</h3>
+      <p>$15.00</p>
+      <button class="add-to-cart" data-product="Nokia 2" data-price="15.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif" alt="Nokia 3">
+      <h3>Nokia 3</h3>
+      <p>$30.00</p>
+      <button class="add-to-cart" data-product="Nokia 3" data-price="30.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+      <h3>Nokia 1</h3>
+      <p>$25.00</p>
+      <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+    </div>
+  </div>
+
+    <!-- Product Rows -->
+    <div class="product-container">
+      <!-- Product Row 1 -->
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+        <h3>Nokia 1</h3>
+        <p>$25.00</p>
+        <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif" alt="Nokia 2">
+        <h3>Nokia 2</h3>
+        <p>$15.00</p>
+        <button class="add-to-cart" data-product="Nokia 2" data-price="15.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia2.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif" alt="Nokia 3">
+        <h3>Nokia 3</h3>
+        <p>$30.00</p>
+        <button class="add-to-cart" data-product="Nokia 3" data-price="30.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia3.jfif">Add to Cart</button>
+      </div>
+  
+      <div class="product-card">
+        <img src="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif" alt="Nokia 1">
+        <h3>Nokia 1</h3>
+        <p>$25.00</p>
+        <button class="add-to-cart" data-product="Nokia 1" data-price="25.00" data-img="c:\Users\lab6pc9\Music\Add To Card\Nokia1.jfif">Add to Cart</button>
+      </div>
+    </div>
+
+  <!-- Cart Icon -->
+  <div class="cart-icon" onclick="toggleCartPanel()">🛒</div>
+
+  <!-- Cart Side Panel -->
+  <div class="cart-side-panel" id="cart-panel">
+    <h2>Cart</h2>
+    <div class="cart-items" id="cart-items">
+      <!-- Cart items will be dynamically added here -->
+    </div>
+    <div class="cart-footer">
+      <p>Total Price: $<span id="total-price">0.00</span></p>
+      <button onclick="clearCart()">Clear Cart</button>
+      <button class="close-cart" onclick="toggleCartPanel()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let cart = [];
+    let totalPrice = 0;
+
+    // Toggle cart side panel
+    function toggleCartPanel() {
+      const panel = document.getElementById('cart-panel');
+      panel.classList.toggle('open');
+    }
+
+    // Add product to cart
+    function addToCart(productName, productPrice, productImg) {
+      const item = { name: productName, price: parseFloat(productPrice), quantity: 1, img: productImg };
+      cart.push(item);
+      updateCart();
+    }
+
+    // Update cart content and total price
+    function updateCart() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      cartItemsContainer.innerHTML = '';
+
+      totalPrice = 0;
+      cart.forEach((item, index) => {
+        const cartItemDiv = document.createElement('div');
+        cartItemDiv.classList.add('cart-item');
+        cartItemDiv.innerHTML = `
+          <img src="${item.img}" alt="${item.name}" style="width: 40px; height: 40px; object-fit: cover;">
+          <span>${item.name} - $${item.price}</span>
+          <button onclick="removeFromCart(${index})">Remove</button>
+        `;
+        cartItemsContainer.appendChild(cartItemDiv);
+        totalPrice += item.price;
+      });
+
+      // Update total price
+      document.getElementById('total-price').innerText = totalPrice.toFixed(2);
+    }
+
+    // Remove product from cart
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    // Clear all items in the cart
+    function clearCart() {
+      cart = [];
+      updateCart();
+      toggleCartPanel(); // Close the cart panel after clearing
+    }
+
+    // Add event listeners to "Add to Cart" buttons
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', () => {
+        const productName = button.getAttribute('data-product');
+        const productPrice = button.getAttribute('data-price');
+        const productImg = button.getAttribute('data-img');
+        addToCart(productName, productPrice, productImg);
+      });
+    });
+  </script>
+</body>
+</html>
